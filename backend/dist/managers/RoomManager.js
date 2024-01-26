@@ -19,7 +19,6 @@ class RoomManager {
     }
     onOffer(roomId, sdp, sendersSocketId) {
         const room = this.rooms.get(roomId);
-        console.log("Test if room is getting created", room);
         if (!room) {
             return;
         }

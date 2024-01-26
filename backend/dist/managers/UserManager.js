@@ -53,7 +53,6 @@ class UserManager {
     initHandlers(socket) {
         // User1 will send an offer to server and it will passs it to user2 with there SDP.
         socket.on("offer", ({ sdp, roomId }) => {
-            console.log("Offer is coming on backend");
             this.roomManager.onOffer(roomId, sdp, socket.id);
         });
         // Once User2 receives the offer it will pass an answer to server and it will be passed to server1.

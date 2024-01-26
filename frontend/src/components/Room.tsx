@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Socket, io } from "socket.io-client";
+import Home from "./Home";
+import Navbar from "./Navbar";
 
 function Room({
   name,
@@ -187,10 +189,12 @@ function Room({
   }, [localVideoRef]);
 
   return (
-    <div>
-      <video autoPlay width={400} height={400} ref={localVideoRef} />
-      {lobby ? "Waiting to connect you to someone" : null}
-      <video autoPlay width={400} height={400} ref={remoteVideoRef} />
+    <div className="flex flex-col gap-12">
+      <Navbar />
+      <Home localVideoRef={localVideoRef} remoteVideoRef={remoteVideoRef} />
+      {/* <video autoPlay width={400} height={400} ref={localVideoRef} /> */}
+      {/* {lobby ? "Waiting to connect you to someone" : null}
+      <video autoPlay width={400} height={400} ref={remoteVideoRef} /> */}
     </div>
   );
 }

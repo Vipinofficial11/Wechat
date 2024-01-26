@@ -17,6 +17,7 @@ function Landing() {
       video: true,
       audio: true,
     });
+
     const audioTrack = stream.getAudioTracks()[0];
     const videoTrack = stream.getVideoTracks()[0];
 
