@@ -192,9 +192,6 @@ function Room({
     <div className="flex flex-col gap-12">
       <Navbar />
       <Home localVideoRef={localVideoRef} remoteVideoRef={remoteVideoRef} />
-      {/* <video autoPlay width={400} height={400} ref={localVideoRef} /> */}
-      {/* {lobby ? "Waiting to connect you to someone" : null}
-      <video autoPlay width={400} height={400} ref={remoteVideoRef} /> */}
     </div>
   );
 }
