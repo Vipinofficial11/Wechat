@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Room from "./Room";
+import { io } from "socket.io-client";
 
 function Landing() {
   const [name, setName] = useState("");
@@ -38,6 +39,16 @@ function Landing() {
     }
   }, [videoRef]);
 
+  const handleLogin = () => {
+    setIsSubmitted(true);
+    const socket = io("http://localhost:3000");
+    socket.emit("user-joined", { name });
+  };
+
+  const nameHandler = (data: string) => {
+    setName(data);
+  };
+
   if (!submitted) {
     return (
       <>
@@ -75,7 +86,7 @@ function Landing() {
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-[#5e4644] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#7f6867] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#382e2d]"
-                  onClick={() => setIsSubmitted(true)}
+                  onClick={handleLogin}
                 >
                   Continue
                 </button>
@@ -91,6 +102,7 @@ function Landing() {
       name={name}
       localAudioTrack={localAudioTrack}
       localVideoTrack={localVideoTrack}
+      nameHandler={nameHandler}
     />
   );
 }

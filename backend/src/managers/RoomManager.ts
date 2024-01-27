@@ -41,6 +41,7 @@ export class RoomManager {
     // If receiving user is found, send an offer from his side.
     console.log("INFO - User has received an offer.");
     receivingUser?.socket.emit("offer", { sdp, roomId });
+    console.log("INFO - Emitted the offer from the backend");
   }
 
   onAnswer(roomId: string, sdp: string, sendersSocketId: string) {

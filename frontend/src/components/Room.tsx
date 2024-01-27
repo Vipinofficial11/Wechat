@@ -7,10 +7,12 @@ function Room({
   name,
   localAudioTrack,
   localVideoTrack,
+  nameHandler,
 }: {
   name: string;
   localAudioTrack: MediaStreamTrack | null;
   localVideoTrack: MediaStreamTrack | null;
+  nameHandler: any;
 }) {
   // States
   const [lobby, setLobby] = useState(true);
@@ -25,6 +27,7 @@ function Room({
     useState<MediaStreamTrack | null>(null);
   const [remoteVideoTrack, setRemoteVideoTrack] =
     useState<MediaStreamTrack | null>(null);
+  const [userConnected, setUserConnected] = useState<boolean>(false);
 
   // Creating 2 video refs, one for local video stream and one for remote video stream.
   const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -32,6 +35,10 @@ function Room({
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
+
+    socket.on("user-added", ({ userName }) => {
+      nameHandler(userName);
+    });
 
     // Creating an event to send offer to the STUN/Signaling server.
     socket.on("send-offer", async ({ roomId }) => {
@@ -73,6 +80,8 @@ function Room({
           roomId,
         });
       };
+
+      setUserConnected(true);
     });
 
     // Creating an event when offer is received.
@@ -95,7 +104,6 @@ function Room({
       setRemoteMediaStream(stream);
       // trickle ice.
       setReceivingPeerConnection(peerConnection);
-      // missing code ..
 
       // On Ice candidate.
       peerConnection.onicecandidate = async (e) => {
@@ -139,6 +147,7 @@ function Room({
 
     // Creating an event when answer is received.
     socket.on("answer", ({ roomId, sdp: remoteSdp }) => {
+      console.log("In Answer of frontend");
       setLobby(false);
       setsendingPeerConnection((peerConnection) => {
         peerConnection?.setRemoteDescription(remoteSdp);

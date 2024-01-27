@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import Room from "./Room";
 
 function ChatSection() {
   const [messages, setMessages] = useState<any>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [roomId, setRoomId] = useState<String>("");
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
     setSocket(socket);
 
-    socket.on("send message", ({ message, userId }) => {
+    socket.on("room-created", ({ roomId }) => {
+      setRoomId(roomId);
+    });
+
+    socket.on("send message", ({ message, userId, messageRoomId }) => {
       setMessages((prevMessages) => [...prevMessages, { message, userId }]);
     });
 
@@ -21,6 +27,7 @@ function ChatSection() {
   }, []);
 
   const handleChatMessages = () => {
+    console.log("This is the roomId : ", roomId);
     socket?.emit("send message", { message: inputMessage, userId: socket?.id });
     setInputMessage("");
   };

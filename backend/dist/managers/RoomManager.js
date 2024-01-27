@@ -26,6 +26,7 @@ class RoomManager {
         // If receiving user is found, send an offer from his side.
         console.log("INFO - User has received an offer.");
         receivingUser === null || receivingUser === void 0 ? void 0 : receivingUser.socket.emit("offer", { sdp, roomId });
+        console.log("INFO - Emitted the offer from the backend");
     }
     onAnswer(roomId, sdp, sendersSocketId) {
         const room = this.rooms.get(roomId);

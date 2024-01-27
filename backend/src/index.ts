@@ -2,7 +2,6 @@ import express from "express";
 import { createServer } from "node:http";
 import { Server, Socket } from "socket.io";
 import { UserManager } from "./managers/UserManager";
-import { ChatManager } from "./managers/ChatManager";
 
 const app = express();
 const server = createServer(app);
@@ -13,11 +12,16 @@ const io = new Server(server, {
 });
 
 const userManager = new UserManager();
-const chatManager = new ChatManager();
+let userName = "";
 io.on("connection", (socket: Socket) => {
   console.log("INFO - User connected");
   // Adding users in a room.
-  userManager.addUser("randomName", socket);
+  socket.on("user-joined", ({ name }) => {
+    userName = name;
+    console.log("Name of user in backedn", userName);
+  });
+  userManager.addUser(userName, socket);
+  io.emit("user-added", { userName });
 
   // Adding chats.
   socket.on("send message", (data) => {
